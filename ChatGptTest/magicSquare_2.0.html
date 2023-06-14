@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Matrix Calculator</title>
+    <style>
+        table {
+            border-collapse: collapse;
+        }
+
+        table td {
+            border: 1px solid black;
+            width: 50px;
+            height: 50px;
+            text-align: center;
+        }
+
+        #result {
+            margin-top: 10px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <h1>Matrix Calculator</h1>
+    <table id="matrix">
+        <tr>
+            <td contenteditable="true" oninput="calculate()">0</td>
+            <td contenteditable="true" oninput="calculate()">0</td>
+            <td contenteditable="true" oninput="calculate()">0</td>
+        </tr>
+        <tr>
+            <td contenteditable="true" oninput="calculate()">0</td>
+            <td contenteditable="true" oninput="calculate()">0</td>
+            <td contenteditable="true" oninput="calculate()">0</td>
+        </tr>
+        <tr>
+            <td contenteditable="true" oninput="calculate()">0</td>
+            <td contenteditable="true" oninput="calculate()">0</td>
+            <td contenteditable="true" oninput="calculate()">0</td>
+        </tr>
+    </table>
+    <div id="result"></div>
+
+    <script>
+        function calculate() {
+            var matrix = [];
+            var rows = document.querySelectorAll('#matrix tr');
+            
+            // Retrieve matrix values from the table
+            rows.forEach(function(row) {
+                var rowData = [];
+                var cells = row.querySelectorAll('td');
+                cells.forEach(function(cell) {
+                    rowData.push(Number(cell.textContent));
+                });
+                matrix.push(rowData);
+            });
+            
+            // Calculate sums
+            var sums = {
+                rows: [],
+                columns: [],
+                diagonals: []
+            };
+
+            // Calculate row sums
+            matrix.forEach(function(row) {
+                var sum = row.reduce(function(acc, value) {
+                    return acc + value;
+                }, 0);
+                sums.rows.push(sum);
+            });
+
+            // Calculate column sums
+            for (var i = 0; i < matrix[0].length; i++) {
+                var sum = 0;
+                for (var j = 0; j < matrix.length; j++) {
+                    sum += matrix[j][i];
+                }
+                sums.columns.push(sum);
+            }
+
+            // Calculate diagonal sums
+            var diagonalSum1 = matrix[0][0] + matrix[1][1] + matrix[2][2];
+            var diagonalSum2 = matrix[0][2] + matrix[1][1] + matrix[2][0];
+            sums.diagonals.push(diagonalSum1, diagonalSum2);
+            
+            // Display the sums
+            var resultDiv = document.getElementById('result');
+            resultDiv.innerHTML = 'Row sums: ' + sums.rows.join(', ') + '<br>' +
+                                  'Column sums: ' + sums.columns.join(', ') + '<br>' +
+                                  'Diagonal sums: ' + sums.diagonals.join(', ');
+        }
+    </script>
+</body>
+</html>

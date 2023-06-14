@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Matrix Calculator</title>
+    <style>
+        table {
+            border-collapse: collapse;
+        }
+
+        table td {
+            border: 1px solid black;
+            width: 50px;
+            height: 50px;
+            text-align: center;
+        }
+
+        .sum {
+            font-weight: bold;
+            margin-left: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Matrix Calculator</h1>
+    <table id="matrix">
+        <tr>
+            <td contenteditable="true" oninput="calculate()">0</td>
+            <td contenteditable="true" oninput="calculate()">0</td>
+            <td contenteditable="true" oninput="calculate()">0</td>
+            <td id="row1Sum" class="sum"></td>
+        </tr>
+        <tr>
+            <td contenteditable="true" oninput="calculate()">0</td>
+            <td contenteditable="true" oninput="calculate()">0</td>
+            <td contenteditable="true" oninput="calculate()">0</td>
+            <td id="row2Sum" class="sum"></td>
+        </tr>
+        <tr>
+            <td contenteditable="true" oninput="calculate()">0</td>
+            <td contenteditable="true" oninput="calculate()">0</td>
+            <td contenteditable="true" oninput="calculate()">0</td>
+            <td id="row3Sum" class="sum"></td>
+        </tr>
+        <tr>
+            <td id="column1Sum" class="sum"></td>
+            <td id="column2Sum" class="sum"></td>
+            <td id="column3Sum" class="sum"></td>
+            <td id="diagonal1Sum" class="sum"></td>
+        </tr>
+        <tr>
+            <td id="diagonal2Sum" class="sum"></td>
+        </tr>
+    </table>
+
+    <script>
+        function calculate() {
+            var matrix = [];
+            var rows = document.querySelectorAll('#matrix tr');
+            
+            // Retrieve matrix values from the table
+            rows.forEach(function(row, rowIndex) {
+                var rowData = [];
+                var cells = row.querySelectorAll('td');
+                cells.forEach(function(cell, columnIndex) {
+                    var value = Number(cell.textContent);
+                    rowData.push(value);
+
+                    // Calculate and display row sums
+                    if (rowIndex < 3) {
+                        var rowSum = rowData.reduce(function(acc, val) {
+                            return acc + val;
+                        }, 0);
+                        document.getElementById('row' + (rowIndex + 1) + 'Sum').textContent = rowSum;
+                    }
+
+                    // Calculate and display column sums
+                    if (columnIndex < 3) {
+                        var columnSum = matrix.reduce(function(acc, row) {
+                            return acc + row[columnIndex];
+                        }, 0);
+                        document.getElementById('column' + (columnIndex + 1) + 'Sum').textContent = columnSum;
+                    }
+
+                    // Calculate and display diagonal sums
+                    if (rowIndex === columnIndex) {
+                        var diagonalSum1 = 0;
+                        for (var i = 0; i < 3; i++) {
+                            diagonalSum1 += matrix[i][i];
+                        }
+                        document.getElementById('diagonal1Sum').textContent = diagonalSum1;
+                    }
+                    if (rowIndex + columnIndex === 2) {
+                        var diagonalSum2 = 0;
+                        for (var j = 0; j < 3; j++) {
+                            diagonalSum2 += matrix[j][2 - j];
+                        }
+                        document.getElementById('diagonal2Sum').textContent = diagonalSum2;
+                    }
+                });
+                matrix.push(rowData);
+            });
+        }
+    </script>
+</body>
+</html>
